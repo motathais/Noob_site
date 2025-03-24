@@ -35,7 +35,7 @@ document.getElementById('cadastroUsuarios').addEventListener('submit', async fun
     console.log('Form Data:', formData); // Log para depuração
 
     try {
-        const response = await fetch('https://api-noob-1.onrender.com/api/usuarios', {
+        const response = await fetch('https://noob-api-1.onrender.com/api/usuarios', {
             method: 'POST',
             body: formData
         });

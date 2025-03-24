@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const scriptLogin = document.createElement('script');
             scriptLogin.src = '../componentes/script-login.js';
+            scriptLogin.type = 'module'; // Torna o script um módulo
             document.body.appendChild(scriptLogin);
         }
     });
