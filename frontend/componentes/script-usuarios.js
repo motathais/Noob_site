@@ -1,3 +1,5 @@
+import { API_BASE_URL } from './config/config.js';
+
 document.getElementById('cadastroUsuarios').addEventListener('submit', async function (event) {
     event.preventDefault();
 
@@ -8,6 +10,7 @@ document.getElementById('cadastroUsuarios').addEventListener('submit', async fun
     const senha = document.getElementById('senha-usuario').value;
     const confirmacao = document.getElementById('confirmacao').value;
     const foto = document.getElementById('foto-usuario').files[0];
+    const capa = document.getElementById('capa-usuario').files[0];
     const formulario = document.getElementById('cadastroUsuarios');
 
     // Validar se os campos obrigatórios estão preenchidos
@@ -29,13 +32,16 @@ document.getElementById('cadastroUsuarios').addEventListener('submit', async fun
     formData.append('email', email);
     formData.append('senha', senha);
     if (foto) {
-        formData.append('file', foto);
+        formData.append('foto', foto);
+    }
+    if (foto) {
+        formData.append('capa', capa);
     }
 
     console.log('Form Data:', formData); // Log para depuração
 
     try {
-        const response = await fetch('https://noob-api-1.onrender.com/api/usuarios', {
+        const response = await fetch(`${API_BASE_URL}/usuarios`, {
             method: 'POST',
             body: formData
         });
@@ -57,17 +63,23 @@ document.getElementById('cadastroUsuarios').addEventListener('submit', async fun
 });
 
 document.getElementById('foto-usuario').onchange = function (evt) {
-    var tgt = evt.target || window.event.srcElement,
-        files = tgt.files;
+    previewImage(evt, 'preview');
+};
 
-    // Verifica se foi selecionada alguma imagem
+document.getElementById('capa-usuario')?.addEventListener('change', function (evt) {
+    previewImage(evt, 'preview');
+});
+
+function previewImage(evt, previewId) {
+    const files = evt.target.files;
+
     if (FileReader && files && files.length) {
-        var fr = new FileReader();
+        const fr = new FileReader();
         fr.onload = function () {
-            var img = document.getElementById('preview');
+            const img = document.getElementById(previewId);
             img.src = fr.result;
-            img.style.display = 'block'; // Exibe a imagem
+            img.style.display = 'block';
         }
         fr.readAsDataURL(files[0]);
     }
-};
+}
