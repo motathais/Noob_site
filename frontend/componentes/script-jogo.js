@@ -1,3 +1,5 @@
+import { API_BASE_URL } from './config/config.js';
+
 document.addEventListener('DOMContentLoaded', async function() {
     // Barra de Ajuste
     const barraDificuldade = document.getElementById('barraDificuldade');
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     if (jogoId) {
         try {
-            const response = await fetch(`https://api-noob.onrender.com/api/jogos/${jogoId}`);
+            const response = await fetch(`${API_BASE_URL}/jogos/${jogoId}`);
             if (!response.ok) {
                 throw new Error(`Erro HTTP! status: ${response.status}`);
             }
