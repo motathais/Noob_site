@@ -194,43 +194,63 @@ const formCadastroJogos = document.getElementById('cadastroJogos');
 const btnAdicionarJogo = document.getElementById('btnCadastrarJogo');
 
 btnAdicionarJogo.addEventListener('click', async () => {
-    // Aqui você pode implementar o código para enviar os dados do formulário para a API
-    // Exemplo básico de envio de dados (você precisa ajustar conforme sua API)
-    const novoJogo = {
-        titulo: document.getElementById('titulo-jogo').value,
-        ano: document.getElementById('ano-jogo').value,
-        idade: document.getElementById('idade-recomendada-jogo').value,
-        designer: document.getElementById('designer-jogo').value,
-        artista: document.getElementById('artista-jogo').value,
-        editora: document.getElementById('editora-jogo').value,
-        digital: document.getElementById('digital-jogo').value,
-        categoria: document.getElementById('categoria-jogo').value,
-        componentes: document.getElementById('componentes-jogo').value,
-        descricao: document.getElementById('descricao-jogo').value
-        // Adicione mais campos conforme necessário
-    };
-
     try {
-        const response = await fetch('https://api-noob-1.onrender.com/api/jogos', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(novoJogo)
-        });
-
-        if (!response.ok) {
-            throw new Error('Erro ao cadastrar jogo');
+        
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Erro", "Usuário não autenticado. Favor logar novamente!"); 
+            return;
         }
 
-        // Se cadastrado com sucesso, recarregar os itens
-        await fetchItems();
-        modal.style.display = 'none'; // Fechar o modal após cadastrar
+        // Capturar os valores do formulário
+        const titulo = document.getElementById('titulo-jogo').value;
+        const ano = document.getElementById('ano-jogo').value;
+        const idade = document.getElementById('idade-recomendada-jogo').value;
+        const designer = document.getElementById('designer-jogo').value;
+        const artista = document.getElementById('artista-jogo').value;
+        const editora = document.getElementById('editora-jogo').value;
+        const digital = document.getElementById('digital-jogo').value;
+        const categoria = document.getElementById('categoria-jogo').value;
+        const componentes = document.getElementById('componentes-jogo').value;
+        const descricao = document.getElementById('descricao-jogo').value;
+
+        // Criar o FormData e adicionar os campos
+        const formData = new FormData();
+        formData.append("titulo", titulo);
+        formData.append("ano", ano);
+        formData.append("idade", idade);
+        formData.append("designer", designer);
+        formData.append("artista", artista);
+        formData.append("editora", editora);
+        formData.append("digital", digital);
+        formData.append("categoria", categoria);
+        formData.append("componentes", componentes);
+        formData.append("descricao", descricao);
+
+        // Enviar o formulário para a API
+        const response = await fetch(`${API_BASE_URL}/jogos`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`, 
+            },
+            body: formData, 
+        });
+
+        // Tratar a resposta
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Erro ao cadastrar jogo.');
+        }
+
+        alert("Sucesso", "Jogo cadastrado com sucesso!"); 
+        formCadastroJogos.reset(); // Limpa o formulário
 
     } catch (error) {
         console.error('Erro ao cadastrar jogo:', error);
+        alert('Erro ao cadastrar jogo. Verifique os campos e tente novamente.'); 
     }
 });
+
 
 // Carregar os itens ao iniciar a página
 document.addEventListener('DOMContentLoaded', fetchItems);
