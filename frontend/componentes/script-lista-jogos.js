@@ -1,3 +1,5 @@
+import { API_BASE_URL } from './config/config.js';
+
 const itemsPerPage = 15;
 let currentPage = 1;
 let items = [];
@@ -5,7 +7,7 @@ let items = [];
 // Função para buscar os itens da API
 async function fetchItems() {
     try {
-        const response = await fetch('https://api-noob-1.onrender.com/api/jogos');
+        const response = await fetch(`${API_BASE_URL}/jogos`);
         if (!response.ok) {
             throw new Error(`Erro HTTP! status: ${response.status}`);
         }
